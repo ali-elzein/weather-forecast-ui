@@ -1,0 +1,33 @@
+<h2>Login / User Info</h2>
+
+<form (ngSubmit)="onSubmit()">
+
+  <label>
+    Full Name:
+    <input type="text" [(ngModel)]="user.name" name="name" required />
+  </label>
+
+  <label>
+    Phone Number:
+    <input type="tel" [(ngModel)]="user.phone" name="phone" required />
+  </label>
+
+  <label>
+    Address:
+    <input type="text" [(ngModel)]="user.address" name="address" />
+  </label>
+
+  <div>
+    <p>Top 3 Locations:</p>
+    <label *ngFor="let loc of user.favorites; let i = index">
+      Location {{ i + 1 }}:
+      <input
+        type="text"
+        [(ngModel)]="user.favorites[i]"
+        name="location{{i}}"
+      />
+    </label>
+  </div>
+
+  <button type="submit">Save & Continue</button>
+</form>

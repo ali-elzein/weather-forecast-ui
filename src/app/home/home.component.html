@@ -1,0 +1,26 @@
+<h2>Welcome, {{ userName }}!</h2>
+
+<h3>Your Top 3 Locations:</h3>
+<div *ngFor="let forecast of favoriteForecasts">
+  <h4>{{ forecast.location }}</h4>
+  <ul>
+    <li *ngFor="let item of forecast.data">
+      {{ item.date }} - {{ item.summary }} - {{ item.temperatureC }}°C / {{ item.temperatureF }}°F
+    </li>
+  </ul>
+</div>
+
+<hr />
+
+<h3>Search Weather</h3>
+<input [(ngModel)]="searchLocation" placeholder="Enter city or ZIP" />
+<button (click)="search()">Search</button>
+
+<div *ngIf="searchResults.length">
+  <h4>Weather in {{ searchLocation }}</h4>
+  <ul>
+    <li *ngFor="let item of searchResults">
+      {{ item.date }} - {{ item.summary }} - {{ item.temperatureC }}°C / {{ item.temperatureF }}°F
+    </li>
+  </ul>
+</div>

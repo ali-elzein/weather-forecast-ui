@@ -1,0 +1,57 @@
+.weather-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  font-family: Arial, sans-serif;
+  padding: 1rem;
+}
+
+.search-bar {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+input {
+  flex: 1;
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.error {
+  color: red;
+  margin-bottom: 1rem;
+}
+
+.forecast-list {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+
+.forecast-card {
+  background-color: #f1f1f1;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.1);
+}
+
+.forecast-card .date {
+  font-weight: bold;
+}
+
+.forecast-card .summary {
+  margin-top: 0.5rem;
+  font-style: italic;
+}
+
+.forecast-card .temp {
+  margin-top: 0.25rem;
+  font-size: 1.1rem;
+}
