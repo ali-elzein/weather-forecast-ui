@@ -10,8 +10,8 @@ export const routes: Routes = [
         component: HomeComponent,
         canActivate: [authGuard]
     },
-    { path: '', redirectTo: '/login', pathMatch: 'full' },
-    { path: '**', redirectTo: '/login' }
+    { path: '', redirectTo: '/home', pathMatch: 'full' },
+    { path: '**', redirectTo: '/home' }
 ];
 
 export const appConfig = provideRouter(routes);

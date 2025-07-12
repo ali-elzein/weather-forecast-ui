@@ -12,9 +12,11 @@ import { FormsModule } from '@angular/forms';
 })
 export class HomeComponent implements OnInit {
     userName: string = '';
-    favoriteForecasts: { location: string; data: WeatherForecast[] }[] = [];
+    searchInput: string = '';
     searchLocation: string = '';
-    searchResults: WeatherForecast[] = [];
+    favoriteForecasts: { location: string; data: WeatherForecast | null }[] = [];
+    searchResults: WeatherForecast | null = null;
+    errorMessage: string = '';
 
     constructor(private weatherService: WeatherService) { }
 
@@ -33,11 +35,63 @@ export class HomeComponent implements OnInit {
         }
     }
 
-    search(): void {
-        if (!this.searchLocation.trim()) return;
+    addFavorite(input: string): void {
+        this.weatherService.getForecast(input).subscribe({
+            next: data => {
+                const cityName = data.location;
 
-        this.weatherService.getForecast(this.searchLocation).subscribe(data => {
+                if (!cityName) {
+                    alert('Could not determine city name from API response.');
+                    return;
+                }
+
+                if (this.favoriteForecasts.some(f => f.location.toLowerCase() === cityName.toLowerCase())) {
+                    alert(`${cityName} is already in your favorites.`);
+                    return;
+                }
+
+                this.favoriteForecasts.push({ location: cityName, data });
+
+                const storedUser = localStorage.getItem('user');
+                if (storedUser) {
+                    const parsed = JSON.parse(storedUser);
+                    if (!parsed.favorites) {
+                        parsed.favorites = [];
+                    }
+                    parsed.favorites.push(cityName);
+                    localStorage.setItem('user', JSON.stringify(parsed));
+                }
+
+                this.searchLocation = '';
+                this.errorMessage = '';
+            },
+            error: err => {
+                console.error('Error fetching forecast:', err);
+                alert('Failed to add favorite due to API error.');
+            }
+        });
+    }
+
+
+    search(): void {
+        if (!this.searchInput.trim()) return;
+
+        this.searchLocation = this.searchInput;
+
+        this.weatherService.getForecast(this.searchInput).subscribe(data => {
             this.searchResults = data;
         });
     }
+
+    removeFavorite(city: string): void {
+        this.favoriteForecasts = this.favoriteForecasts.filter(f => f.location !== city);
+
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            const user = JSON.parse(userStr);
+            user.favorites = user.favorites.filter((loc: string) => loc !== city);
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+    }
+
 }

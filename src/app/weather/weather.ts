@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { WeatherService, WeatherForecast } from '../services/weather.service';
@@ -11,24 +11,26 @@ import { WeatherService, WeatherForecast } from '../services/weather.service';
 })
 export class WeatherComponent {
   location: string = '';
-  forecasts: WeatherForecast[] = [];
-  error: string = '';
+  currentForecast: WeatherForecast | null = null;
+  errorMessage: string = '';
 
   constructor(private weatherService: WeatherService) {}
 
   search(): void {
-    this.error = '';
     if (!this.location.trim()) {
-      this.error = 'Please enter a location.';
+      this.errorMessage = 'Please enter a location.';
       return;
     }
 
     this.weatherService.getForecast(this.location).subscribe({
-      next: (data) => this.forecasts = data,
+      next: (data) => {
+        this.currentForecast = data;
+        this.errorMessage = '';
+      },
       error: (err) => {
         console.error(err);
-        this.error = 'Failed to retrieve weather data.';
-        this.forecasts = [];
+        this.currentForecast = null;
+        this.errorMessage = 'Could not fetch weather. Try another location.';
       }
     });
   }

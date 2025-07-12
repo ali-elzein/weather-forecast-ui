@@ -1,18 +1,18 @@
 <div class="weather-container">
-  <h2>Weather Forecast</h2>
+    <h2>Weather Forecast</h2>
 
-  <div class="search-bar">
-    <input [(ngModel)]="location" placeholder="Enter city or zip" />
-    <button (click)="search()">Search</button>
-  </div>
+    <div class="search-bar">
+        <input [(ngModel)]="location" placeholder="Enter city or zip" />
+        <button (click)="search()">Search</button>
+    </div>
 
-  <div *ngIf="error" class="error">{{ error }}</div>
+    <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
-  <ul *ngIf="forecasts.length" class="forecast-list">
-    <li *ngFor="let f of forecasts" class="forecast-card">
-      <div class="date">{{ f.date }}</div>
-      <div class="summary">{{ f.summary }}</div>
-      <div class="temp">{{ f.temperatureC }}°C / {{ f.temperatureF }}°F</div>
-    </li>
-  </ul>
+    <div *ngIf="currentForecast">
+        <h3>Current Weather for {{ location }}</h3>
+        <p><strong>Date:</strong> {{ currentForecast.date }}</p>
+        <p><strong>Summary:</strong> {{ currentForecast.summary }}</p>
+        <p>🌡️ {{ currentForecast.temperatureC }}°C / {{ currentForecast.temperatureF }}°F</p>
+    </div>
+
 </div>

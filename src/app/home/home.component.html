@@ -1,26 +1,46 @@
+<div class="banner">
+    <h1>🌤️ Weather Forecast</h1>
+</div>
+
 <h2>Welcome, {{ userName }}!</h2>
 
-<h3>Your Top 3 Locations:</h3>
+<h3>Your Favorite Locations:</h3>
 <div *ngFor="let forecast of favoriteForecasts">
-  <h4>{{ forecast.location }}</h4>
-  <ul>
-    <li *ngFor="let item of forecast.data">
-      {{ item.date }} - {{ item.summary }} - {{ item.temperatureC }}°C / {{ item.temperatureF }}°F
-    </li>
-  </ul>
+    <div class="favorite-header">
+        <h4>{{ forecast.location | titlecase }}</h4>
+        <button (click)="removeFavorite(forecast.location)">Remove</button>
+    </div>
+    <div *ngIf="forecast.data; else noData">
+        <p>
+            {{ forecast.data.date }} - {{ forecast.data.summary }} -
+            {{ forecast.data.temperatureC !== null && forecast.data.temperatureC !== undefined ?
+            forecast.data.temperatureC + '°C' : 'N/A' }} /
+            {{ forecast.data.temperatureF !== null && forecast.data.temperatureF !== undefined ?
+            forecast.data.temperatureF + '°F' : 'N/A' }}
+        </p>
+    </div>
+    <ng-template #noData>
+        <p>Weather data unavailable.</p>
+    </ng-template>
 </div>
 
 <hr />
 
 <h3>Search Weather</h3>
-<input [(ngModel)]="searchLocation" placeholder="Enter city or ZIP" />
-<button (click)="search()">Search</button>
-
-<div *ngIf="searchResults.length">
-  <h4>Weather in {{ searchLocation }}</h4>
-  <ul>
-    <li *ngFor="let item of searchResults">
-      {{ item.date }} - {{ item.summary }} - {{ item.temperatureC }}°C / {{ item.temperatureF }}°F
-    </li>
-  </ul>
+<div class="search-section">
+    <input [(ngModel)]="searchInput" placeholder="Enter city or ZIP" />
+    <button (click)="search()">Search</button>
+    <button (click)="addFavorite(searchLocation)" class="button-spacing">Add to Favorites</button>
 </div>
+
+<div *ngIf="searchResults; else noSearchData">
+    <h4>Weather in {{ searchLocation | titlecase }}</h4>
+    <p>
+        {{ searchResults.date }} - {{ searchResults.summary }} -
+        {{ searchResults.temperatureC }}°C / {{ searchResults.temperatureF }}°F
+    </p>
+</div>
+
+<ng-template #noSearchData>
+    <p>No weather data to display.</p>
+</ng-template>
